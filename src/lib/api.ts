@@ -11,7 +11,10 @@ let bearer:string|null|undefined = null;
 
 if(token){
     token.subscribe((t) => {
-        bearer = t
+        if(t){
+
+            bearer = t
+        }
     })
 }
 
@@ -19,7 +22,7 @@ const getOptions = (method:string, payload = null) => {
     const obj: fetchObject = {
         method: method.toUpperCase(),
         headers: {
-            'Authorization': 'bearer ' + bearer,
+            // 'Authorization': 'bearer ' + bearer,
             'Content-Type': 'application/json'
         }
     }
