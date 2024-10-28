@@ -2,21 +2,16 @@
     // Import necessary components and functions
     import { Button, Input } from "flowbite-svelte";
     import {tasks} from "$lib/stores/tasks";
+    import {onMount} from "svelte";
+    import {GridPlusOutline} from "flowbite-svelte-icons";
 
     // Initialize variables
     let newTask = '';
     let searchQuery = '';
     let storedTasks = JSON.parse(localStorage.getItem('todo_tasks') || '[]');
 
-    // Set default tasks if none are stored
-    if (!Array.isArray(storedTasks) || storedTasks.length === 0) {
-        storedTasks = [
-            { id: 1, text: 'Learn Svelte', completed: true },
-            { id: 2, text: 'Get a job @ retech', completed: false }
-        ];
-    }
 
-    // Create a writable store for tasks
+
 
     // Function to add a new task
     function addTask() {
@@ -65,6 +60,15 @@
     tasks.subscribe(value => {
         localStorage.setItem('todo_tasks', JSON.stringify(value));
     });
+
+    onMount(() => {
+        if($tasks.length === 0){
+            $tasks = [
+                { id: 1, text: 'Learn Svelte', completed: true },
+                { id: 2, text: 'Get a job @ retech', completed: false }
+            ]
+        }
+    })
 </script>
 
 <main class="container mx-auto p-4 text-center">
@@ -73,24 +77,19 @@
     <div class="flex flex-col items-center space-y-4">
         
         <!-- Input for adding new tasks -->
-        <div class="flex space-x-4 w-full sm:w-1/2">
+        <form on:submit|preventDefault={addTask} class="flex space-x-4 w-full sm:w-1/2">
             <Input 
-                class="flex-grow" 
+                class="flex-grow"
+                required
+                minlength="3"
                 placeholder="Enter your task" 
                 bind:value={newTask} 
-                on:keydown={(e) => {
-                    if (e.key === 'Enter') {
-                        addTask();
-                    }
-                }} 
             />
             <Button class="flex-shrink-0" on:click={addTask}>
-                <svg class="w-6 h-6 me-2" viewBox="0 0 24 24"  aria-hidden="true" xmlns="http://www.w3.org/2000/svg"  fill="none">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 17h6m-3 3v-6M4.857 4h4.286c.473 0 .857.384.857.857v4.286a.857.857 0 0 1-.857.857H4.857A.857.857 0 0 1 4 9.143V4.857C4 4.384 4.384 4 4.857 4Zm10 0h4.286c.473 0 .857.384.857.857v4.286a.857.857 0 0 1-.857.857h-4.286A.857.857 0 0 1 14 9.143V4.857c0-.473.384-.857.857-.857Zm-10 10h4.286c.473 0 .857.384.857.857v4.286a.857.857 0 0 1-.857.857H4.857A.857.857 0 0 1 4 19.143v-4.286c0-.473.384-.857.857-.857Z"/>
-                </svg>              
+                <GridPlusOutline class="w-6 h-6 me-2" />
                 Add Task
             </Button>
-        </div>
+        </form>
         
         <!-- List of tasks -->
         <ul class="w-full sm:w-1/2 mt-8 space-y-4">
