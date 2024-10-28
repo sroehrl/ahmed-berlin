@@ -1,5 +1,6 @@
-<script>
+<script lang="ts">
     import { Button, Input } from "flowbite-svelte";
+    import {get} from "$lib/api";
 
     let name = '';
     let ageData = { age: null };
@@ -15,15 +16,8 @@
         loading = true;
         errorMessage = '';
         try {
-            const response = await fetch(`https://api.agify.io?name=${name}`);
-            if (!response.ok) {
-                if (response.status === 429) {
-                    throw new Error('Too many requests. Please try again later.');
-                } else {
-                    throw new Error('Failed to fetch age data.');
-                }
-            }
-            ageData = await response.json();
+
+            ageData = await get(`?name=${name}`)
         } catch (error) {
             console.error(error.message);
             errorMessage = error.message;
