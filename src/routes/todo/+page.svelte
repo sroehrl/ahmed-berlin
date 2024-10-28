@@ -4,6 +4,7 @@
     import {tasks} from "$lib/stores/tasks";
     import {onMount} from "svelte";
     import {GridPlusOutline} from "flowbite-svelte-icons";
+    import {fly} from 'svelte/transition';
 
     // Initialize variables
     let newTask = '';
@@ -15,19 +16,9 @@
 
     // Function to add a new task
     function addTask() {
-        document.startViewTransition(async () => {
-            if (newTask.trim()) {
-                tasks.update(currentTasks => {
-                    const updatedTasks = [
-                        ...currentTasks,
-                        { id: Date.now(), text: newTask, completed: false }
-                    ];
-                    localStorage.setItem('todo_tasks', JSON.stringify(updatedTasks));
-                    return updatedTasks;
-                });
-                newTask = '';
-            }
-        });
+        $tasks = [...$tasks, { id: Date.now(), text: newTask, completed: false }];
+        newTask = '';
+
     }
 
     // Function to delete a task by id
@@ -93,9 +84,8 @@
         
         <!-- List of tasks -->
         <ul class="w-full sm:w-1/2 mt-8 space-y-4">
-            {#each $tasks as task (task.id)}
-            {#if task.text.toLowerCase().includes(searchQuery.toLowerCase())}
-                <li class="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-800 rounded-lg shadow-sm">
+            {#each $tasks.filter(t => t.text.toLowerCase().includes(searchQuery.toLowerCase())) as task (task.id)}
+                <li class="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-800 rounded-lg shadow-sm" in:fly={{duration: 900}}>
                     <div>
                         <input 
                             id="default-checkbox" 
@@ -115,7 +105,6 @@
                         </Button>
                     </div>
                 </li>
-            {/if}
             {/each}
         </ul>
 
