@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Button, Input } from "flowbite-svelte";
+    import {Button, Input, Spinner} from "flowbite-svelte";
     import {get} from "$lib/api";
 
     let name = '';
@@ -45,12 +45,16 @@
         <Button type="submit">Predict Age</Button>
     </form>
 
-
-    {#if loading && ageData.age !== null}
-        <p class="text-lg font-medium text-gray-700 dark:text-gray-300 mt-4">Loading...</p>
-    {:else if name && ageData.age !== null}
-        <p class="text-lg font-medium text-gray-700 dark:text-gray-300 mt-4">The predicted age for <span class="font-bold text-gray-900 dark:text-white">{name}</span> is <span class="font-bold text-gray-900 dark:text-white">{ageData.age}</span> years old.</p>
+    {#if ageData.age !== null}
+        <p class="text-lg font-medium text-gray-700 dark:text-gray-300 mt-4">
+            {#if loading}
+                <Spinner />
+            {:else}
+                The predicted age for <span class="font-bold text-gray-900 dark:text-white">{name}</span> is <span class="font-bold text-gray-900 dark:text-white">{ageData.age}</span> years old.
+            {/if}
+        </p>
     {/if}
+
 
     {#if errorMessage}
         <p class="text-lg font-medium text-red-600 dark:text-red-400 mt-4">{errorMessage}</p>
