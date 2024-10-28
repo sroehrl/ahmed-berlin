@@ -9,9 +9,6 @@
     // Initialize variables
     let newTask = '';
     let searchQuery = '';
-    let storedTasks = JSON.parse(localStorage.getItem('todo_tasks') || '[]');
-
-
 
 
     // Function to add a new task
@@ -23,17 +20,12 @@
 
     // Function to delete a task by id
     function deleteTask(id) {
-        tasks.update(currentTasks => {
-            const updatedTasks = currentTasks.filter(task => task.id !== id);
-            localStorage.setItem('todo_tasks', JSON.stringify(updatedTasks));
-            return updatedTasks;
-        });
+        $tasks = [...$tasks.filter(task => task.id !== id)];
     }
 
     // Function to clear all tasks
     function clearAllTasks() {
-        tasks.set([]);
-        localStorage.setItem('todo_tasks', JSON.stringify([]));
+        $tasks = []
     }
 
     // Function to toggle the completion status of a task
@@ -48,6 +40,7 @@
     }
 
     // Subscribe to tasks store and update local storage on change
+    // NOTE: This already takes care of storing to localStorage. No need to set localStorage.setItem('tasks', JSON.stringify(tasks)) anywhere else
     tasks.subscribe(value => {
         localStorage.setItem('todo_tasks', JSON.stringify(value));
     });
