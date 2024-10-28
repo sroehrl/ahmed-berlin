@@ -28,7 +28,7 @@ Quick start for a svelte PWA powered by flowbite
 
 ## Creating a project using github's repository template
 
-Use the template button at https://github.com/sroehrl/svelte-flowbite-boilerplate to start a new project
+Use the template button at https://github.com/sroehrl/ahmed-berin to start a new project
 
 - create .env (or .env.development, .env.deployment)
 - setup src/lib/colors.js
