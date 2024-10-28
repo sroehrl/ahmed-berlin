@@ -1,0 +1,9 @@
+{
+	"/": [
+		"src/routes/+layout.ts",
+		"src/routes/+layout.ts"
+	],
+	"/todo": [
+		"src/routes/+layout.ts"
+	]
+}
