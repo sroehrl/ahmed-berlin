@@ -10,25 +10,16 @@
     let newTask = '';
     let searchQuery = '';
 
-
     // Function to add a new task
     function addTask() {
         $tasks = [...$tasks, { id: Date.now(), text: newTask, completed: false }];
         newTask = '';
-
     }
 
     // Function to delete a task by id
     function deleteTask(id) {
         $tasks = [...$tasks.filter(task => task.id !== id)];
     }
-
-    // Function to clear all tasks
-    function clearAllTasks() {
-        $tasks = []
-    }
-
-
 
     // Subscribe to tasks store and update local storage on change
     // NOTE: This already takes care of storing to localStorage. No need to set localStorage.setItem('tasks', JSON.stringify(tasks)) anywhere else
@@ -54,13 +45,13 @@
             <!-- Input for adding new tasks -->
             <form on:submit|preventDefault={addTask} class="flex space-x-4 w-full sm:w-1/2">
                 <Input
-                        class="flex-grow"
+                        class="flex-1"
                         required
                         minlength="3"
                         placeholder="Enter your task"
                         bind:value={newTask}
                 />
-                <Button class="flex-shrink-0" >
+                <Button type="submit">
                     <GridPlusOutline class="w-4 h-4 me-2" />
                     Add Task
                 </Button>
@@ -69,7 +60,7 @@
             <!-- List of tasks -->
             <ul class="w-full sm:w-1/2 mt-8 space-y-4">
                 {#each $tasks.filter(t => t.text.toLowerCase().includes(searchQuery.toLowerCase())) as task (task.id)}
-                    <li class="flex items-center gap-3 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg shadow-sm" in:fly={{duration: 900}}>
+                    <li class="flex items-center gap-3 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg shadow-sm" in:fly={{duration: 500, x: '30%'}} out:fly={{duration: 500, x: '-30%'}}>
                         <div>
                             <Checkbox bind:checked={task.completed} />
                         </div>
@@ -101,9 +92,8 @@
 
             <!-- Button to clear all tasks -->
             <div class="w-full sm:w-1/2 mt-8">
-                <Button class="w-full" on:click={clearAllTasks}>Clear All</Button>
+                <Button class="w-full" on:click={() => $tasks = []}>Clear All</Button>
             </div>
         </div>
-
     </div>
 </main>
