@@ -36,7 +36,7 @@ jobs:
     - name: create env file
       run: |
         touch .env
-        echo PUBLIC_API_PATH=https://api.celest.services/api >> .env
+        echo PUBLIC_API_PATH=https://api.agify.io >> .env
     - name: npm install and npm test
       run: |
         npm i
