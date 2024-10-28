@@ -1,6 +1,7 @@
 <script lang="ts">
     import {Button, Input, Spinner} from "flowbite-svelte";
     import {get} from "$lib/api";
+    import {fly} from 'svelte/transition';
 
     let name = '';
     let ageData = { age: null };
@@ -11,21 +12,11 @@
         // resets hier
         ageData.age = null;
         errorMessage = '';
-
-        // nicht mehr nötig. "require" wirds lösen
-        /*if (!name.trim()) {
-            errorMessage = 'Name cannot be empty.';
-            return;
-        }*/
-
         loading = true;
-        errorMessage = '';
         try {
             ageData = await get(`?name=${name}`)
         } catch (error) {
-            console.error(error.message);
             errorMessage = error.message;
-            ageData.age = null;
         } finally {
             loading = false;
         }
@@ -45,21 +36,17 @@
         <Button type="submit">Predict Age</Button>
     </form>
 
-    {#if ageData.age !== null}
-        <p class="text-lg font-medium text-gray-700 dark:text-gray-300 mt-4">
+    {#if loading || ageData.age !== null}
+        <p class="text-lg font-medium text-gray-700 dark:text-gray-300 mt-4" in:fly={{ y: 20, duration: 300 }}>
             {#if loading}
                 <Spinner />
             {:else}
                 The predicted age for <span class="font-bold text-gray-900 dark:text-white">{name}</span> is <span class="font-bold text-gray-900 dark:text-white">{ageData.age}</span> years old.
             {/if}
         </p>
-    {/if}
-
-
-    {#if errorMessage}
+    {:else if errorMessage.length > 0 }
         <p class="text-lg font-medium text-red-600 dark:text-red-400 mt-4">{errorMessage}</p>
     {/if}
-
     <footer class="mt-8">
         <p class="text-sm text-gray-500 dark:text-gray-400">Powered by <a href="https://agify.io" class="text-blue-600 dark:text-blue-400" target="_blank" rel="noopener noreferrer">Agify.io</a></p>
     </footer>
