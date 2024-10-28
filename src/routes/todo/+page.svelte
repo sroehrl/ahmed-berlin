@@ -1,7 +1,7 @@
-<script>
+<script lang="ts">
     // Import necessary components and functions
     import { Button, Input } from "flowbite-svelte";
-    import { writable } from 'svelte/store';
+    import {tasks} from "$lib/stores/tasks";
 
     // Initialize variables
     let newTask = '';
@@ -17,7 +17,6 @@
     }
 
     // Create a writable store for tasks
-    let tasks = writable(storedTasks);
 
     // Function to add a new task
     function addTask() {
